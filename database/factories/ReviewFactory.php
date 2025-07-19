@@ -17,11 +17,13 @@ class ReviewFactory extends Factory
     public function definition(): array
     {
          return [
+             'book_id' => null,
             'review' => fake()->paragraph(),
             'rating' => fake()->numberBetween(1, 5),
-            'book_id' => null,
             'created_at' => $this->faker->dateTimeBetween('-2 year'),
-            'updated_at' => $this->faker->dateTimeBetween('created_at', 'now'),
+            'updated_at' => function(array $attributes) {
+                return $this->faker->dateTimeBetween($attributes['created_at'],'now');
+            },
         ];
     }
 
