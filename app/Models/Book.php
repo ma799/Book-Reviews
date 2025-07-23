@@ -24,7 +24,8 @@ class Book extends Model
 
     public function scopePopular(Builder $query, $from = null, $to = null): Builder|QueryBuilder
     {
-        return $query->withCount([
+        return $query
+        ->withCount([
             'reviews' => fn(Builder $q) => $this->dateRangeFilter($q, $from, $to)
         ])
             ->orderBy('reviews_count', 'desc');
@@ -32,7 +33,8 @@ class Book extends Model
 
     public function scopeHighestRated(Builder $query, $from = null, $to = null): Builder|QueryBuilder
     {
-        return $query->withAvg([
+        return $query
+        ->withAvg([
             'reviews' => fn(Builder $q) => $this->dateRangeFilter($q, $from, $to)
         ], 'rating')
         // ->withCount([
@@ -46,8 +48,31 @@ class Book extends Model
         return $query->having('reviews_count', '>=', $minReviews);
     }
 
-    private function dateRangeFilter(Builder $query, $from = null, $to = null)
-    {
+
+  public function scopeFilter(Builder $query, ?string $filter = null): Builder|QueryBuilder
+{
+    if ($filter === 'popular_last_month') {
+        return $query->popular($from = now()->subMonth(), $to = now())
+        ->highestRated($from = now()->subMonth(), $to = now())
+        ->minReviews(2);
+    } elseif ($filter === 'popular_last_6months') {
+        return $query->popular($from = now()->subMonths(6), $to = now())
+        ->highestRated($from = now()->subMonths(6), $to = now())
+        ->minReviews(5);
+    } elseif ($filter === 'highest_rated_last_month') {
+        return $query->highestRated($from = now()->subMonth(), $to = now())
+        ->popular($from = now()->subMonth(), $to = now())
+        ->minReviews(2);
+    } elseif ($filter === 'highest_rated_last_6months') {
+        return $query->highestRated($from = now()->subMonths(6), $to = now())
+        ->popular($from = now()->subMonths(6), $to = now())
+        ->minReviews(5);
+    }
+    return $query->latest('created_at')->highestRated()->popular();
+}
+
+private function dateRangeFilter(Builder $query, ?string $from = null, ?string $to = null): Builder|QueryBuilder
+{
     // Validate dates
     if ($from && $to && $from > $to) {
         // Option 1: Swap dates if wrong order
@@ -55,15 +80,17 @@ class Book extends Model
 
         // Option 2: Return empty results for invalid range
         // $query->whereRaw('1 = 0');
-        // return;
+        // return $query;
     }
-        if ($from && !$to) {
-            $query->where('created_at', '>=', $from);
-        } elseif (!$from && $to) {
-            $query->where('created_at', '<=', $to);
-        } elseif ($from && $to) {
-            $query->whereBetween('created_at', [$from, $to]);
-        }
 
+    if ($from && !$to) {
+        return $query->where('created_at', '>=', $from);
+    } elseif (!$from && $to) {
+        return $query->where('created_at', '<=', $to);
+    } elseif ($from && $to) {
+        return $query->whereBetween('created_at', [$from, $to]);
     }
+
+    return $query;
+}
 }
