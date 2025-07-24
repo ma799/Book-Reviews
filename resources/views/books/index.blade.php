@@ -60,4 +60,9 @@
     @endforelse
   </ul>
 
+
+    <div class="pagination">
+        {{ $books->appends(request()->query())->links() }}
+    </div>
+
 @endsection

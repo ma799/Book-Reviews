@@ -12,6 +12,8 @@ class Book extends Model
 {
     use HasFactory;
 
+    protected $fillable = ['title', 'author' ];
+
     public function reviews()
     {
         return $this->hasMany(Review::class);
@@ -22,21 +24,31 @@ class Book extends Model
         return $query->where('title', 'LIKE', '%' . $title . '%');
     }
 
+    public function scopeWithReviewsCount(Builder $query, $from = null, $to = null): Builder|QueryBuilder
+    {
+        return $query->withCount([
+            'reviews' => fn(Builder $q) => $this->dateRangeFilter($q, $from, $to)
+        ]);
+    }
+
     public function scopePopular(Builder $query, $from = null, $to = null): Builder|QueryBuilder
     {
         return $query
-            ->withCount([
-                'reviews' => fn(Builder $q) => $this->dateRangeFilter($q, $from, $to)
-            ])
+            ->withReviewsCount($from, $to)
             ->orderBy('reviews_count', 'desc');
+    }
+
+    public function scopeWithAvgRating(Builder $query, $from = null, $to = null): Builder|QueryBuilder
+    {
+        return $query->withAvg([
+            'reviews' => fn(Builder $q) => $this->dateRangeFilter($q, $from, $to)
+        ], 'rating');
     }
 
     public function scopeHighestRated(Builder $query, $from = null, $to = null): Builder|QueryBuilder
     {
         return $query
-            ->withAvg([
-                'reviews' => fn(Builder $q) => $this->dateRangeFilter($q, $from, $to)
-            ], 'rating')
+            ->withAvgRating($from, $to)
             // ->withCount([
             //     'reviews' => fn(Builder $q) => $this->dateRangeFilter($q, $from, $to)
             // ])
@@ -123,5 +135,16 @@ class Book extends Model
         }
 
         return $query;
+    }
+
+
+      protected static function booted()
+    {
+        static::saved(
+            fn(Book $book) => cache()->forget('book:' . $book->id)
+        );
+        static::deleted(
+            fn(Book $book) => cache()->forget('book:' . $book->id)
+    );
     }
 }
