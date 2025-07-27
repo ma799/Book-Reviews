@@ -3,13 +3,13 @@
 ## App Screenshots
 
 <p align="center">
-  <img src="./screenshots/Screenshot1.png" alt="Demo" width="600">
+  <img src="./screenshots/Screenshot1.png" alt="Demo" width="350">
 </p>
 <p align="center">
-  <img src="./screenshots/Screenshot2.png" alt="Demo" width="600">
+  <img src="./screenshots/Screenshot2.png" alt="Demo" width="350">
 </p>
 <p align="center">
-  <img src="./screenshots/Screenshot3.png" alt="Demo" width="600">
+  <img src="./screenshots/Screenshot3.png" alt="Demo" width="300">
 </p>
 
 A fast and elegant Laravel application to add books, write and manage reviews with caching for speed and rate limiting to prevent spam.
