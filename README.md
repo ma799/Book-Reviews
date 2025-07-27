@@ -2,12 +2,12 @@
 
 ## App Screenshots
 
-<p align="center">
+<span align="center">
   <img src="./screenshots/Screenshot1.png" alt="Demo" width="350">
-</p>
-<p align="center">
+</span>
+<span align="center">
   <img src="./screenshots/Screenshot2.png" alt="Demo" width="350">
-</p>
+</span>
 <p align="center">
   <img src="./screenshots/Screenshot3.png" alt="Demo" width="300">
 </p>
