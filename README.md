@@ -3,13 +3,13 @@
 ## App Screenshots
 
 <p align="center">
-  <img src="./screenshots/screenshot1.png" alt="Demo" width="600">
+  <img src="./screenshots/Screenshot1.png" alt="Demo" width="600">
 </p>
 <p align="center">
-  <img src="./screenshots/screenshot2.png" alt="Demo" width="600">
+  <img src="./screenshots/Screenshot2.png" alt="Demo" width="600">
 </p>
 <p align="center">
-  <img src="./screenshots/screenshot3.png" alt="Demo" width="600">
+  <img src="./screenshots/Screenshot3.png" alt="Demo" width="600">
 </p>
 
 A fast and elegant Laravel application to add books, write and manage reviews with caching for speed and rate limiting to prevent spam.
@@ -73,6 +73,7 @@ php artisan migrate --seed
 ```
 
 🚦 Running the Application
+
 Start the development servers in two separate terminals:
 
 Backend Server:
@@ -87,14 +88,24 @@ php artisan serve
 🚨 Troubleshooting
 Issue	Solution
 Database connection errors	Verify MySQL service is running
+
 Permission errors	Run chmod -R 775 storage bootstrap/cache
+
 Missing APP_KEY	Run php artisan key:generate
 
 
+
 🌟 Features
+
 ✔️ Add, edit, and delete books
+
 ✔️ Write, manage, and paginate reviews
+
 ✔️ Cached book and paginated reviews for fast loading
+
 ✔️ Rate limiting: max 3 reviews per user per hour
+
 ✔️ Clean and responsive UI
+
 ✔️ User-friendly error handling and validation
+
