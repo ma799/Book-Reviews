@@ -2,11 +2,12 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <title>Book Reviews</title>
-  <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+    <meta charset="UTF-8">
+    <title>Book Reviews</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
 
-  {{-- blade-formatter-disable --}}
+    {{-- blade-formatter-disable --}}
   <style type="text/tailwindcss">
     .btn {
       @apply bg-white rounded-md px-4 py-2 text-center font-medium text-slate-500 shadow-sm ring-1 ring-slate-700/10 hover:bg-slate-50 h-10;
@@ -63,8 +64,30 @@
   {{-- blade-formatter-enable --}}
 </head>
 
-<body class="container mx-auto mt-10 mb-10 max-w-3xl">
-  @yield('content')
+<body class="container mx-auto mt-10 mb-10 max-w-4xl">
+
+    <div x-data="{ open: true }" x-show="open" class=" align-top mb-4">
+        @if (session('success'))
+            <div class="flex justify-between bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative" role="alert">
+                <div>
+                    <strong class="font-bold">Success!</strong>
+                    <span class="block sm:inline">{{ session('success') }}</span>
+                </div>
+                <button @click="open = false">X</button>
+            </div>
+        @endif
+
+        @if (session('error'))
+            <div class="flex justify-between bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+                <div>
+                    <strong class="font-bold">Error!</strong>
+                    <span class="block sm:inline">{{ session('error') }}</span>
+                </div>
+                <button @click="open = false">X</button>
+            </div>
+        @endif
+    </div>
+    @yield('content')
 </body>
 
 </html>
